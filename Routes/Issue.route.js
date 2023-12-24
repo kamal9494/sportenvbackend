@@ -21,7 +21,7 @@ router.get("/", verifyToken, async (req, res) => {
 router.patch("/", verifyToken, async (req, res) => {
   try {
     const { id, sid, studentName, quantity } = req.body;
-    const updatedItem = await Sport.findByIdAndUpdate(
+    const updatedItem = await Sport.findOneAndUpdate(
       { _id: id, quantity: { $gte: quantity } },
       { $inc: { quantity: -quantity } },
       { new: true }
@@ -32,7 +32,7 @@ router.patch("/", verifyToken, async (req, res) => {
     const issueRequest = new Issue({
       sid: sid,
       studentName: studentName,
-      sportName: item.sportName,
+      sportName: updatedItem.sportName,
       quantity: quantity,
       issuedDate: Date.now(),
     });
