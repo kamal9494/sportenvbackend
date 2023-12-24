@@ -21,13 +21,6 @@ router.get("/", verifyToken, async (req, res) => {
 router.patch("/", verifyToken, async (req, res) => {
   try {
     const { id, sid, studentName, quantity } = req.body;
-    const item = await Sport.findById(id);
-    if (!item) {
-      return res.status(404).json({ message: "Item Not Available" });
-    }
-    if (item.quantity - quantity < 0) {
-      res.status(400).json({ message: "Item Not Available" });
-    }
     const updatedItem = await Sport.findByIdAndUpdate(
       { _id: id, quantity: { $gte: quantity } },
       { $inc: { quantity: -quantity } },
