@@ -20,7 +20,8 @@ router.get("/", verifyToken, async (req, res) => {
 
 router.patch("/", verifyToken, async (req, res) => {
   try {
-    const { id, sid, studentName, quantity } = req.body;
+    const { id, quantity } = req.body;
+    const { sid, studentName } = req.user;
     const updatedItem = await Sport.findOneAndUpdate(
       { _id: id, quantity: { $gte: quantity } },
       { $inc: { quantity: -quantity } },
