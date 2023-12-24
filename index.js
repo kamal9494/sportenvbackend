@@ -35,10 +35,7 @@ app.use("/changePassword", ChangePasswordRoute);
 
 
 mongoose
-  .connect(process.env.MONGODB_URI,{
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(process.env.MONGODB_URI)
   .then(() => {
     console.log("mongodb is connected");
   })
