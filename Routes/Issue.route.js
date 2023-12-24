@@ -26,13 +26,16 @@ router.patch("/", verifyToken, async (req, res) => {
       return res.status(404).json({ message: "Item Not Available" });
     }
     if (item.quantity - quantity < 0) {
-      res.status(404).json({ message: "Item Not Available" });
+      res.status(400).json({ message: "Item Not Available" });
     }
     const updatedItem = await Sport.findByIdAndUpdate(
-      id,
+      { _id: id, quantity: { $gte: quantity } },
       { $inc: { quantity: -quantity } },
       { new: true }
     );
+    if (!updatedItem) {
+      return res.status(400).json({ message: "Insufficient Quantity" });
+    }
     const issueRequest = new Issue({
       sid: sid,
       studentName: studentName,
@@ -42,7 +45,7 @@ router.patch("/", verifyToken, async (req, res) => {
     });
 
     const result = await issueRequest.save();
-    
+
     res.status(200).json(updatedItem);
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
