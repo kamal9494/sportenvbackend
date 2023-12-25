@@ -21,7 +21,8 @@ router.get("/", verifyToken, async (req, res) => {
 router.patch("/", verifyToken, async (req, res) => {
   try {
     const { id, quantity } = req.body;
-    const { sid, studentName } = req.user;
+    const { sid } = req.user;
+    const studentName = req.user.name;
     const updatedItem = await Sport.findOneAndUpdate(
       { _id: id, quantity: { $gte: quantity } },
       { $inc: { quantity: -quantity } },
@@ -42,6 +43,7 @@ router.patch("/", verifyToken, async (req, res) => {
 
     res.status(200).json(updatedItem);
   } catch (error) {
+    console.log(error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
