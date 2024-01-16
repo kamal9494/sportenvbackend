@@ -26,7 +26,7 @@ router.get("/count", verifyToken, async (req, res) => {
         .json({ message: "Unauthorized access, only for admins" });
     }
     const results = await History.find({}, { __v: 0, _id: 0 });
-    res.status(200).send(results.length);
+    res.status(200).send({issues : results.length});
   } catch (error) {
     res.status(500).json({ message: "Internal Server Error" });
   }
